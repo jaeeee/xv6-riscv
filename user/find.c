@@ -46,10 +46,10 @@ void find(char* directory, char* file){
     p = buf+strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
-      if(de.inum == 0)
-        continue;
-      if(strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
-        continue;
+    //   if(de.inum == 0) 
+    //     continue;
+    //   if(strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
+    //     continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
       find(buf, file);
