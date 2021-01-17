@@ -42,7 +42,7 @@ void find(char* path, char* name){
   } else if (st.type == T_DIR) {
       if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
-      break;
+      return;
     }
     strcpy(buf, path);
     p = buf+strlen(buf);
