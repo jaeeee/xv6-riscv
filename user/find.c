@@ -63,7 +63,7 @@ void find(char *directory, char *file)
             //   if(strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
             //     continue;
 
-            if ((de.inum == 0) && (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0))
+            if ((de.inum == 0) || (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0))
             {
                 continue;
             }
