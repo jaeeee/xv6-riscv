@@ -18,7 +18,7 @@
 int checkFile(char* directory, char* file) {
     char *ptr;
     for (ptr = file + strlen(directory); ptr >= directory && *ptr != '/'; ptr--) {
-        p++;
+        ptr++;
     }
     if (strcmp(ptr, file) == 0) {
         return 1;
