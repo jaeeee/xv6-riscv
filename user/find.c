@@ -33,13 +33,13 @@ void find(char* path, char* name){
     return;
   }
 
-  if (st.type == "T_FILE") {
+  if (st.type == T_FILE) {
 
       if (checkFile(path, name)) {
           printf("%s\n", path);
       }
 
-  } else if (st.type == "T_DIR") {
+  } else if (st.type == T_DIR) {
       if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
       break;
