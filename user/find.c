@@ -3,19 +3,28 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
-int
-wanted_file(char *path, char *name)
-{
-  char *p;
+// int
+// wanted_file(char *path, char *name)
+// {
+//   char *p;
+//   for(p=path+strlen(path); p >= path && *p != '/'; p--)
+//     ;
+//   p++;
+//   if(strcmp(p, name) == 0) return 1; else return 0;
+// }
 
-  // Find first character after last slash.
-  for(p=path+strlen(path); p >= path && *p != '/'; p--)
-    ;
-  p++;
 
-  if(strcmp(p, name) == 0) return 1; else return 0;
+
+int checkFile(char* directory, char* file) {
+    char *ptr;
+    for (ptr = file + strlen(directory); ptr >= directory && *ptr != '/'; ptr--) {
+        p++;
+    }
+    if (strcmp(ptr, file) == 0) {
+        return 1;
+    }
+    return 0;
 }
-
 
 void find(char* path, char* name){
   char buf[64], *p;
@@ -36,7 +45,7 @@ void find(char* path, char* name){
 
   switch(st.type){
   case T_FILE:
-    if (wanted_file(path, name))
+    if (checkFile(path, name))
         printf("%s\n", path);
     break;
 
