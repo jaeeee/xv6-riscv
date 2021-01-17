@@ -3,18 +3,6 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
-// int
-// wanted_file(char *path, char *name)
-// {
-//   char *p;
-//   for(p=path+strlen(path); p >= path && *p != '/'; p--)
-//     ;
-//   p++;
-//   if(strcmp(p, name) == 0) return 1; else return 0;
-// }
-
-
-
 int checkFile(char* directory, char* file) {
     char *ptr;
     ptr = directory+strlen(directory);
@@ -45,14 +33,14 @@ void find(char* path, char* name){
     return;
   }
 
-  switch(st.type){
-  case T_FILE:
-    if (checkFile(path, name))
-        printf("%s\n", path);
-    break;
+  if (st.type == "T_FILE") {
 
-  case T_DIR:
-    if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
+      if (checkFile(path, name)) {
+          printf("%s\n", path);
+      }
+
+  } else if (st.type == "T_DIR") {
+      if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
       break;
     }
@@ -68,7 +56,6 @@ void find(char* path, char* name){
       p[DIRSIZ] = 0;
       find(buf, name);
     }
-    break;
   }
   close(fd);
 }
