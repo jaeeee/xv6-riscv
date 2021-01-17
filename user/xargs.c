@@ -1,47 +1,44 @@
 #include "kernel/types.h"
-#include "kernel/stat.h"
-#include "kernel/param.h"
 #include "user/user.h"
 
-int
-main(int argc, char *argv[])
-{
-  int argv_len = 0;
-  char buf[128] = {0};
-  char *max_argv[MAXARG];
-  for(int i = 1; i < argc; i++){
-      max_argv[i-1] = argv[i];
+int main(int argc, char *argv[]) {
+  char buf2[512];
+  char buf[32][32];
+  char *pass[32];
+
+  for (int i = 0; i < 32; i++)
+    pass[i] = buf[i];
+
+  int i;
+  for (i = 1; i < argc; i++)
+    strcpy(buf[i - 1], argv[i]);
+
+  int n;
+  while ((n = read(0, buf2, sizeof(buf2))) > 0) {
+    int pos = argc - 1;
+    char *c = buf[pos];
+    for (char *p = buf2; *p; p++) {
+      if (*p == ' ' || *p == '\n') {
+        *c = '\0';
+        pos++;
+        c = buf[pos];
+      } else
+        *c++ = *p;
+    }
+    *c = '\0';
+    pos++;
+    pass[pos] = 0;
+
+    if (fork()) {
+      wait();
+    } else
+      exec(pass[0], pass);
   }
-  while(gets(buf, sizeof(buf))){
-    int buf_len = strlen(buf);
-    if(buf_len < 1) break;
-    buf[buf_len - 1] = 0;
 
-    argv_len = argc - 1;
-    char *x = buf;
-    while(*x){
-      while(*x && (*x == ' ')) *x++ = 0;
-      if(*x) max_argv[argv_len++] = x;
-      while(*x && (*x != ' ')) x++;
-    }
-
-    if (argv_len >= MAXARG){
-      printf("xargs too many args\n");
-      exit();
-    }
-    if (argv_len < 1){
-      printf("xargs too few args\n");
-      exit();
-    }
-
-    max_argv[argv_len] = 0;
-    if (fork() > 0) {
-        wait();
-    }else{
-        exec(max_argv[0], max_argv);
-        exit();
-    }
+  if (n < 0) {
+    printf("xargs: read error\n");
+    exit();
   }
+
   exit();
-
 }
