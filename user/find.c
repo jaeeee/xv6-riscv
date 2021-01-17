@@ -16,35 +16,33 @@ int checkFile(char* directory, char* file) {
     return 0;
 }
 
-void find(char* path, char* name){
+void find(char* directory, char* file){
   char buf[64], *p;
   int fd;
-  struct dirent de;
   struct stat st;
+  struct dirent de;
 
-  if((fd = open(path, 0)) < 0){
-    fprintf(2, "find: cannot open %s\n", path);
+  if((fd = open(directory, 0)) < 0){
+    fprintf(2, "<find> cannot open %s\n", directory);
     return;
   }
 
   if(fstat(fd, &st) < 0){
-    fprintf(2, "find: cannot stat %s\n", path);
+    fprintf(2, "<find> cannot run stat %s\n", directory);
     close(fd);
     return;
   }
 
   if (st.type == T_FILE) {
-
-      if (checkFile(path, name)) {
-          printf("%s\n", path);
+      if (checkFile(directory, file)) {
+          printf("%s\n", directory);
       }
-
   } else if (st.type == T_DIR) {
-      if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
-      printf("ls: path too long\n");
+      if(strlen(directory) + 1 + DIRSIZ + 1 > sizeof buf){
+      printf("ls: directory is too long\n");
       return;
     }
-    strcpy(buf, path);
+    strcpy(buf, directory);
     p = buf+strlen(buf);
     *p++ = '/';
     while(read(fd, &de, sizeof(de)) == sizeof(de)){
@@ -54,7 +52,7 @@ void find(char* path, char* name){
         continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
-      find(buf, name);
+      find(buf, file);
     }
   }
   close(fd);
